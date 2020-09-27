@@ -1,25 +1,24 @@
 FROM ubuntu:19.10
 MAINTAINER Andrey Yasnikov <yasnikov@realweb.su>
 
-# Указываем таймзону сервера
+# Setting the server timezone
 ENV TZ=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Обновляем систему и устанавливаем базовые утилиты
+# We update the system and install basic utilities
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get -y install wget nano apache2
 
-# Устанавливаем PHP
+# Install PHP
 RUN apt-get -y install php7.3 libapache2-mod-php7.3 php-mysql php-pear php-gd php-mbstring php-xml php-amqp php-soap php-bcmath php-intl php-opcache php-gmp
 
-# Указываем имя сервера
+# Setting the server name
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Копируем файлы конфигов Apache
+# Copying the Apache config files
 ADD ./config/apache2/sites-enabled /etc/apache2/sites-enabled
 
-# Запускаем apache
+# Run Apache
 ENTRYPOINT ["apachectl", "-D", "FOREGROUND"]
 
-# Пробрасываем порты
 EXPOSE 80
