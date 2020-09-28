@@ -1,15 +1,8 @@
 #!/bin/bash
 
-# List of domain names
-domains=(
-"default.lan"
-"default-test.lan"
-)
-
-# Reading the hosts file
-hosts=`cat /etc/hosts`
-
-for domain in ${domains[@]}; do
+IFS=$'\n'
+for domain in $(cat domains.conf)
+do
   #Create config file
   config_file="$PWD/config/apache2/sites-enabled/$domain.conf"
   if [ ! -f $config_file ]; then
@@ -33,11 +26,6 @@ for domain in ${domains[@]}; do
   if [ ! -d $site_folder ]; then
     mkdir -p $site_folder
     echo "hello $domain :)" >> "$site_folder/index.html"
-  fi
-  #Add the missing domains file
-  if [[ "$hosts" != *"$domain"* ]]; then
-    echo "Add domain $domain"
-    echo "127.0.0.1 $domain" >> /etc/hosts
   fi
 done
 
