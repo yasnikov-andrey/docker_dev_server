@@ -4,7 +4,7 @@
 
 - Set permissions on script files.
 
-`chmod ugo+x init_domains.sh init_configs.sh`
+`chmod ugo+x domains.sh run.sh`
 
 - Run the script adding domains to the hosts file as root
 
