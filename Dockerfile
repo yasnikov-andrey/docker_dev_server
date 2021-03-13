@@ -1,4 +1,4 @@
-FROM ubuntu:19.10
+FROM ubuntu:latest
 MAINTAINER Andrey Yasnikov <yasnikov@realweb.su>
 
 # Setting the server timezone
