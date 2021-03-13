@@ -1,8 +1,12 @@
 #!/bin/bash
 
-# Remove DNS settings file
+# Create DNS settings file
 dns_config_folder="$PWD/config/dns"
-rm "$dns_config_folder/dnsmasq.conf"
+if [ -d "$dns_config_folder/dnsmasq.conf" ]; then
+    rm -r -f $dns_config_folder
+else
+  mkdir -p $dns_config_folder
+fi
 
 IFS=$'\n'
 for domain in $(cat domains.conf)
@@ -32,10 +36,7 @@ do
     echo "hello $domain :)" >> "$site_folder/index.html"
   fi
 
-  #Create config for DNS
-  if [ ! -d $dns_config_folder ]; then
-    mkdir -p $dns_config_folder
-  fi
+  #Add DNS records
   echo -e "domain=$domain" >> "$dns_config_folder/dnsmasq.conf"
   echo -e "address=/$domain/127.0.0.1" >> "$dns_config_folder/dnsmasq.conf"
 done
