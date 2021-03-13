@@ -10,7 +10,7 @@ RUN apt-get update && apt-get -y upgrade
 RUN apt-get -y install wget nano apache2
 
 # Install PHP
-RUN apt-get -y install php7.3 libapache2-mod-php7.3 php-mysql php-pear php-gd php-mbstring php-xml php-amqp php-soap php-bcmath php-intl php-opcache php-gmp
+RUN apt-get -y install php7.3 libapache2-mod-php php-mysql php-pear php-gd php-mbstring php-xml php-amqp php-soap php-bcmath php-intl php-opcache php-gmp
 
 # Setting the server name
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
