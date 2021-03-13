@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Remove DNS settings file
+dns_config_folder="$PWD/config/dns"
+rm "$dns_config_folder/dnsmasq.conf"
+
 IFS=$'\n'
 for domain in $(cat domains.conf)
 do
@@ -16,7 +20,7 @@ do
 
         <Directory /home/www/sites/$domain/>
             Options Indexes FollowSymLinks MultiViews
-            AllowOverride None
+            AllowOverride All
             Require all granted
         </Directory>
       </VirtualHost>" >> $config_file
@@ -27,19 +31,14 @@ do
     mkdir -p $site_folder
     echo "hello $domain :)" >> "$site_folder/index.html"
   fi
+
+  #Create config for DNS
+  if [ ! -d $dns_config_folder ]; then
+    mkdir -p $dns_config_folder
+  fi
+  echo -e "domain=$domain" >> "$dns_config_folder/dnsmasq.conf"
+  echo -e "address=/$domain/127.0.0.1" >> "$dns_config_folder/dnsmasq.conf"
 done
 
-pwd
-echo "Try remove old build"
-pwd
-docker stop dev_server && docker rm dev_server
-echo "Build new docker image"
-pwd
-docker build -t dev_server .
-pwd
-echo "Run docker image"
-docker run --name dev_server -d -p 127.0.0.1:80:80 \
--v $PWD/sites:/home/www/sites \
--v $PWD/logs/apache2:/var/log/apache2 dev_server
-pwd
-echo "Server started!"
+#Start!
+docker-compose up

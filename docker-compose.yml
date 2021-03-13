@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./sites:/home/www/sites
+      - ./logs/apache2:/var/log/apache2
+    links:
+      - "db:database"
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+  dns:
+    restart: always
+    image: strm/dnsmasq
+    volumes:
+      - ./config/dns/dnsmasq.conf:/etc/dnsmasq.conf
+    ports:
+      - "53:53/udp"
+    cap_add:
+      - NET_ADMIN

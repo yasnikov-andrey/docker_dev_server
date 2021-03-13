@@ -18,6 +18,8 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 # Copying the Apache config files
 ADD ./config/apache2/sites-enabled /etc/apache2/sites-enabled
 
+RUN a2enmod rewrite
+
 # Run Apache
 ENTRYPOINT ["apachectl", "-D", "FOREGROUND"]
 
