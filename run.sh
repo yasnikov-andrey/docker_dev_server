@@ -2,11 +2,10 @@
 
 # Create DNS settings file
 dns_config_folder="$PWD/config/dns"
-if [ -d "$dns_config_folder/dnsmasq.conf" ]; then
+if [ -d $dns_config_folder ]; then
     rm -r -f $dns_config_folder
-else
-  mkdir -p $dns_config_folder
 fi
+mkdir -p $dns_config_folder
 
 IFS=$'\n'
 for domain in $(cat domains.conf)
